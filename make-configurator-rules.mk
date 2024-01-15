@@ -1,23 +1,29 @@
+# Config
+export
+
 # Constants
+NAME ?= $(error ERROR: Undefined variable NAME)
+VERSION ?= $(error ERROR: Undefined variable VERSION)
+
 DESTDIR ?= $(error ERROR: Undefined variable DESTDIR)
 HOMEDIR ?= $(error ERROR: Undefined variable HOMEDIR)
-LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
-NAME ?= $(error ERROR: Undefined variable NAME)
 PREFIX ?= $(error ERROR: Undefined variable PREFIX)
+BINDIR ?= $(error ERROR: Undefined variable BINDIR)
+LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
+
 SRCDIR_ROOT ?= $(error ERROR: Undefined variable SRCDIR_ROOT)
-VERSION ?= $(error ERROR: Undefined variable VERSION)
 WORKDIR_ROOT ?= $(error ERROR: Undefined variable WORKDIR_ROOT)
 
 override PKGSUBDIR = $(NAME)/$(SRCDIR_ROOT)
-override SRCDIR_CONFIG_FILES := $(shell cd $(SRCDIR_ROOT)/src && find . -type f)
 override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
 override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
 
-export
+override BINDIR_CONFIG_FILES := $(shell (cd $(SRCDIR_ROOT)/bin  && find . -type f) 2>/dev/null)
+override HOMEDIR_CONFIG_FILES := $(shell (cd $(SRCDIR_ROOT)/home  && find . -type f) 2>>/dev/null)
 
 # Error checking
 ifneq ($(DESTDIR), $(abspath $(DESTDIR)))
-	$(error ERROR: Please specify DESTDIR as an absolute path)
+$(error ERROR: Please specify DESTDIR as an absolute path)
 endif
 
 # Includes
@@ -43,17 +49,23 @@ private_clean:
 
 
 .PHONY: private_install
-private_install: $(foreach f, $(SRCDIR_CONFIG_FILES), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(f) $(DESTDIR)/$(HOMEDIR)/$(f))
-	diff -r $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR) $(SRCDIR_ROOT)/src/
+private_install: \
+			$(foreach f, $(BINDIR_CONFIG_FILES), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/bin/$(f) $(DESTDIR)/$(BINDIR)/$(f)) \
+			$(foreach f, $(HOMEDIR_CONFIG_FILES), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home/$(f) $(DESTDIR)/$(HOMEDIR)/$(f))
+	@$(if $(wildcard $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/bin), diff -r $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/bin $(SRCDIR_ROOT)/bin)
+	@$(if $(wildcard $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home), diff -r $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home $(SRCDIR_ROOT)/home)
 	$(MAKE) shared-hook-install WORKDIR_ROOT=$(WORKDIR_ROOT)
 	$(MAKE) hook-install WORKDIR_ROOT=$(WORKDIR_ROOT)
 	@echo "INFO: Installation complete"
 	@echo
 
-$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/%: $(SRCDIR_ROOT)/src/%
+$(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/%: $(SRCDIR_ROOT)/%
 	$(boxerbird::install-as-copy)
 
-$(DESTDIR)/$(HOMEDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/%
+$(DESTDIR)/$(BINDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/bin/%
+	$(boxerbird::install-as-link)
+
+$(DESTDIR)/$(HOMEDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home/%
 	$(boxerbird::install-as-link)
 
 
