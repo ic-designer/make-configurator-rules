@@ -40,8 +40,8 @@ private_clean:
 .PHONY: private_install
 private_install: $(foreach f, $(SRCDIR_CONFIG_FILES), $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/$(f) $(DESTDIR)/$(HOMEDIR)/$(f))
 	diff -r $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR) $(SRCDIR_ROOT)/src/
-	@$(MAKE) shared-hook-install
-	@$(MAKE) hook-install
+	@$(MAKE) shared-hook-install WORKDIR_ROOT=$(WORKDIR_ROOT)
+	@$(MAKE) hook-install WORKDIR_ROOT=$(WORKDIR_ROOT)
 	@echo "INFO: Installation complete"
 	@echo
 
@@ -56,8 +56,8 @@ $(DESTDIR)/$(HOMEDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/%
 private_test :
 	@$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))/$(PKGSUBDIR)
 	@$(MAKE) uninstall DESTDIR=$(abspath $(WORKDIR_TEST))/$(PKGSUBDIR)
-	@$(MAKE) shared-hook-test
-	@$(MAKE) hook-test
+	@$(MAKE) shared-hook-test WORKDIR_ROOT=$(WORKDIR_ROOT)
+	@$(MAKE) hook-test WORKDIR_ROOT=$(WORKDIR_ROOT)
 	@echo "INFO: Testing complete"
 	@echo
 
@@ -73,7 +73,7 @@ private_uninstall:
 	@\rm -rdfv $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR) 2> /dev/null || true
 	@\rm -dv $(dir $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)) 2> /dev/null || true
 	@\rm -dv $(DESTDIR)/$(LIBDIR) 2> /dev/null || true
-	@$(MAKE) shared-hook-uninstall
-	@$(MAKE) hook-uninstall
+	@$(MAKE) shared-hook-uninstall WORKDIR_ROOT=$(WORKDIR_ROOT)
+	@$(MAKE) hook-uninstall WORKDIR_ROOT=$(WORKDIR_ROOT)
 	@echo "INFO: Uninstallation complete"
 	@echo
