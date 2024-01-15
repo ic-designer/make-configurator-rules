@@ -15,6 +15,11 @@ override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
 
 export
 
+# Error checking
+ifneq ($(DESTDIR), $(abspath $(DESTDIR)))
+	$(error ERROR: Please specify DESTDIR as an absolute path)
+endif
+
 # Includes
 BOXERBIRD_BRANCH := main
 override BOXERBIRD.MK := $(WORKDIR_DEPS)/make-boxerbird/boxerbird.mk
