@@ -82,10 +82,15 @@ private_test :
 .PHONY: private_uninstall
 private_uninstall:
 	@echo "INFO: Uninstalling $(NAME)"
-	@$(foreach s, $(SRCDIR_CONFIG_FILES), \
+	@$(foreach s, $(BINDIR_CONFIG_FILES), \
+		rm -v $(DESTDIR)/$(BINDIR)/$(s); \
+		test ! -e $(DESTDIR)/$(BINDIR)/$(s); \
+		rm -dv $(dir $(DESTDIR)/$(BINDIR)/$(s)) 2> /dev/null || true; \
+	)
+	@$(foreach s, $(HOMEDIR_CONFIG_FILES), \
 		rm -v $(DESTDIR)/$(HOMEDIR)/$(s); \
 		test ! -e $(DESTDIR)/$(HOMEDIR)/$(s); \
-		rm -dv $(dir $(DESTDIR)/$(HOMEDIR)/$(s)) 2> /dev/null || true;\
+		rm -dv $(dir $(DESTDIR)/$(HOMEDIR)/$(s)) 2> /dev/null || true; \
 	)
 	@\rm -rdfv $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR) 2> /dev/null || true
 	@\rm -dv $(dir $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)) 2> /dev/null || true
