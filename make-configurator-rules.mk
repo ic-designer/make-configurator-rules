@@ -26,17 +26,6 @@ ifneq ($(DESTDIR), $(abspath $(DESTDIR)))
 $(error ERROR: Please specify DESTDIR as an absolute path)
 endif
 
-# Includes
-BOXERBIRD_BRANCH := main
-override BOXERBIRD.MK := $(WORKDIR_DEPS)/make-boxerbird/boxerbird.mk
-$(BOXERBIRD.MK):
-	@echo "Loading Boxerbird..."
-	git clone --config advice.detachedHead=false --depth 1 \
-			https://github.com/ic-designer/make-boxerbird.git --branch $(BOXERBIRD_BRANCH) \
-			$(WORKDIR_DEPS)/make-boxerbird
-	@echo
-include $(BOXERBIRD.MK)
-
 # Targets
 .PHONY: private_clean
 private_clean:
