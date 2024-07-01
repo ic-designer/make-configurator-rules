@@ -13,11 +13,10 @@ LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
 
 SRCDIR_ROOT ?= $(error ERROR: Undefined variable SRCDIR_ROOT)
 WORKDIR_ROOT ?= $(error ERROR: Undefined variable WORKDIR_ROOT)
+WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
+WORKDIR_TEST ?= $(error ERROR: Undefined variable WORKDIR_TEST)
 
 override PKGSUBDIR = $(NAME)/$(SRCDIR_ROOT)
-override WORKDIR_DEPS = $(WORKDIR_ROOT)/deps
-override WORKDIR_TEST = $(WORKDIR_ROOT)/test/$(NAME)/$(VERSION)
-
 override BINDIR_CONFIG_FILES := $(shell (cd $(SRCDIR_ROOT)/bin  && find . -type f) 2>/dev/null)
 override HOMEDIR_CONFIG_FILES := $(shell (cd $(SRCDIR_ROOT)/home  && find . -type f) 2>>/dev/null)
 
