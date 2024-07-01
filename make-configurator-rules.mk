@@ -48,13 +48,13 @@ private_install: \
 	@echo
 
 $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/%: $(SRCDIR_ROOT)/%
-	$(boxerbird::install-as-copy)
+	$(bowerbird::install-as-copy)
 
 $(DESTDIR)/$(BINDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/bin/%
-	$(boxerbird::install-as-link)
+	$(bowerbird::install-as-link)
 
 $(DESTDIR)/$(HOMEDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home/%
-	$(boxerbird::install-as-link)
+	$(bowerbird::install-as-link)
 
 
 .PHONY: private_uninstall
