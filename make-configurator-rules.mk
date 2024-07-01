@@ -57,16 +57,6 @@ $(DESTDIR)/$(HOMEDIR)/%: $(DESTDIR)/$(LIBDIR)/$(PKGSUBDIR)/home/%
 	$(boxerbird::install-as-link)
 
 
-.PHONY: private_test
-private_test :
-	$(MAKE) install DESTDIR=$(abspath $(WORKDIR_TEST))/$(PKGSUBDIR) WORKDIR_ROOT=$(WORKDIR_ROOT)
-	$(MAKE) uninstall DESTDIR=$(abspath $(WORKDIR_TEST))/$(PKGSUBDIR) WORKDIR_ROOT=$(WORKDIR_ROOT)
-	$(MAKE) shared-hook-test WORKDIR_ROOT=$(WORKDIR_ROOT)
-	$(MAKE) hook-test WORKDIR_ROOT=$(WORKDIR_ROOT)
-	@echo "INFO: Testing complete"
-	@echo
-
-
 .PHONY: private_uninstall
 private_uninstall:
 	@echo "INFO: Uninstalling $(NAME)"
