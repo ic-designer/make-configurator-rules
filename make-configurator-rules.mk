@@ -14,7 +14,6 @@ LIBDIR ?= $(error ERROR: Undefined variable LIBDIR)
 SRCDIR_ROOT ?= $(error ERROR: Undefined variable SRCDIR_ROOT)
 WORKDIR_ROOT ?= $(error ERROR: Undefined variable WORKDIR_ROOT)
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
-WORKDIR_TEST ?= $(error ERROR: Undefined variable WORKDIR_TEST)
 
 override PKGSUBDIR = $(NAME)/$(SRCDIR_ROOT)
 override BINDIR_CONFIG_FILES := $(shell (cd $(SRCDIR_ROOT)/bin  && find . -type f) 2>/dev/null)
@@ -31,7 +30,6 @@ private_clean:
 	@echo "INFO: Cleaning directories:"
 	@$(if $(wildcard $(WORKDIR_DEPS)), rm -rfv $(WORKDIR_DEPS))
 	@$(if $(wildcard $(WORKDIR_ROOT)), rm -rfv $(WORKDIR_ROOT))
-	@$(if $(wildcard $(WORKDIR_TEST)), rm -rfv $(WORKDIR_TEST))
 	@echo "INFO: Cleaning complete"
 	@echo
 
